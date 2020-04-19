@@ -11,7 +11,7 @@ class Pack1(AbstractPack):
     path: Path
 
     asset_count: int
-    assets: Dict[str, Asset1]
+    assets: Dict[int, Asset1]
 
     def __init__(self, path: Path):
         super().__init__(path)
@@ -32,7 +32,7 @@ class Pack1(AbstractPack):
                     file_hash = reader.uint32BE()
 
                     asset = Asset1(name=name, path=self.path, offset=offset, data_length=data_length, data_hash=file_hash)
-                    self.assets[asset.name] = asset
+                    self.assets[asset.name_hash] = asset
 
                 self.asset_count += asset_count
                 reader.seek(next_chunk)
@@ -47,10 +47,7 @@ class Pack1(AbstractPack):
         return super().__iter__()
 
     def __getitem__(self, item):
-        if isinstance(item, str):
-            return self.assets[item]
-        else:
-            raise KeyError
+        return super().__getitem__(item)
 
     def __contains__(self, item):
         super().__contains__(item)

@@ -10,8 +10,8 @@ from .struct_reader import BinaryStructReader
 class Asset2(AbstractAsset):
     name: str = field(default='')
     path: Path = field(default=None)
-
     name_hash: int = field(default=None)
+
     offset: int = field(default=0)
     data_length: int = field(default=0)  # data_length should refer to stored data size
     unzipped_length: int = field(default=0)  # unzipped_length should refer to the real size

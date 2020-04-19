@@ -3,10 +3,13 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict
 
+from .hash import crc64
+
 
 class AbstractAsset(ABC):
     name: str
     path: Path
+    name_hash: int
 
     data_length: int
     data_hash: int
@@ -38,7 +41,7 @@ class AbstractPack(ABC):
     path: Path
 
     asset_count: int
-    assets: Dict[str, AbstractAsset]
+    assets: Dict[int, AbstractAsset]  # The key will now be the crc64 hash of the asset name
 
     @abstractmethod
     def __init__(self, path: Path):
@@ -59,7 +62,13 @@ class AbstractPack(ABC):
 
     @abstractmethod
     def __getitem__(self, item):
-        pass
+        if isinstance(item, str):
+            return self.assets[crc64(item)]
+
+        elif isinstance(item, int):
+            return self.assets[item]
+        else:
+            raise KeyError
 
     @abstractmethod
     def __contains__(self, item):
