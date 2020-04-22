@@ -62,13 +62,21 @@ class AbstractPack(ABC):
 
     @abstractmethod
     def __getitem__(self, item):
-        if isinstance(item, str):
-            return self.assets[crc64(item)]
+        try:
+            if isinstance(item, str):
+                return_asset = self.assets[crc64(item)]
+                if return_asset:  # Set the asset name while we're here
+                    return_asset.name = item
 
-        elif isinstance(item, int):
-            return self.assets[item]
-        else:
-            raise KeyError
+                return return_asset
+
+            elif isinstance(item, int):
+                return self.assets[item]
+            else:
+                raise KeyError
+
+        except KeyError:
+            print(f'[!!] Unable to find "{item}"')
 
     @abstractmethod
     def __contains__(self, item):

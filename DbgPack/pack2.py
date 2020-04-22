@@ -119,7 +119,6 @@ class Pack2(AbstractPack):
             self.map_offset = reader.uint64LE()
 
             reader.seek(self.map_offset)
-            # self.raw_assets = {}
             self.assets = {}
             for i in range(self.asset_count):
                 name_hash = reader.uint64LE()

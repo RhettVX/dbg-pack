@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from typing import Dict
 from pathlib import Path
 from os import walk
-from re import fullmatch
 
 from .abc import AbstractPack
 from .loose_asset import LooseAsset
+from .hash import crc64
 
 
 @dataclass
@@ -14,7 +14,7 @@ class LoosePack(AbstractPack):
     path: Path
 
     asset_count: int
-    assets: Dict[str, LooseAsset]
+    assets: Dict[int, LooseAsset]
 
     def __init__(self, path: Path):
         super().__init__(path)
@@ -23,7 +23,7 @@ class LoosePack(AbstractPack):
         for root, _, files in walk(self.path):
             for file in files:
                 asset = LooseAsset(name=file, path=self.path)
-                self.assets[asset.name] = asset
+                self.assets[asset.name_hash] = asset
 
     def __repr__(self):
         return super().__repr__()
@@ -32,10 +32,7 @@ class LoosePack(AbstractPack):
         return super().__len__()
 
     def __getitem__(self, item):
-        if isinstance(item, str):
-            return self.assets[item]
-        else:
-            raise KeyError
+        return super().__getitem__(item)
 
     def __iter__(self):
         return iter(self.assets.values())
