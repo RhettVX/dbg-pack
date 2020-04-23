@@ -10,7 +10,9 @@ from .pack2 import Pack2
 from .hash import crc64
 
 
+# TODO: calculate file type from asset header
 # TODO: option to lookup directly by name, no hash calc
+# TODO: Apply namelist
 
 
 @dataclass
