@@ -1,15 +1,20 @@
 import hashlib
 from abc import ABC, abstractmethod
+from enum import Enum
 from pathlib import Path
 from typing import Dict
 
 from .hash import crc64
 
 
+# AssetCategory = Enum('AssetCategory', 'Model Audio Texture DSV')
+
+
 class AbstractAsset(ABC):
     name: str
     path: Path
     name_hash: int
+    # category: AssetCategory
 
     data_length: int
     data_hash: int

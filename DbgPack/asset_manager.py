@@ -1,7 +1,7 @@
 from collections import ChainMap
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, ChainMap as ChainMapType
+from typing import List, ChainMap as ChainMapType, Union
 
 from .abc import AbstractPack, AbstractAsset
 from .loose_pack import LoosePack
@@ -11,8 +11,11 @@ from .hash import crc64
 
 
 # TODO: calculate file type from asset header
+# TODO: Filter by type or pack group
 # TODO: option to lookup directly by name, no hash calc
 # TODO: Apply namelist
+# TODO: Calculate MD5 hash of unpacked assets while creating asset index
+# TODO: Optimize pack reading
 
 
 @dataclass
@@ -40,7 +43,7 @@ class AssetManager:
     def __len__(self):
         return len(self.assets)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: Union[str, int]):
         try:
             if isinstance(item, str):
                 return_asset = self.assets[crc64(item)]
